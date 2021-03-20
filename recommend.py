@@ -86,12 +86,12 @@ def query_db(db, query, args=()):
 
 def generate_tfidf_pickles():
     sqldb = connect_db(db_path)
-    records = query_db(sqldb, 'select id, title, content, flags from rss_item')
+    records = query_db(sqldb, 'select author, id, title, content, flags from rss_item')
     content_list = []
     outcome_list = []
     id_list = []
     for record in records:
-        content_list.append(record['title'] + '||||' + record['content'])
+        content_list.append(record['author'] + '||||' + record['title'] + '||||' + record['content'])
         outcome_list.append((record['flags'] is not None and 's' in record['flags']) * 1)
         id_list.append(record['id'])
     print("Total %d feed items found" %(len(content_list)))
