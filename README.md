@@ -15,4 +15,5 @@ Enjoy RSS feeds on newsboat with machine learning recommendations based on your 
 ### Twitter RSS feed recommendation Generation
 ![image](twitter_recommendations.png)
 
-
+### Thanks
+Thanks to https://github.com/karpathy/arxiv-sanity-preserver. Most of the logic was taken from here.
