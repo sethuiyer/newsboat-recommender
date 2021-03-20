@@ -1,5 +1,5 @@
 # newsboat-recommender
-Enjoy RSS feeds with machine learning recommendations based on your interest!
+Enjoy RSS feeds on newsboat with machine learning recommendations based on your interest!
 
 # Instructions:
 	1. Setup a virtual environment and install numpy and sklearn
@@ -9,10 +9,10 @@ Enjoy RSS feeds with machine learning recommendations based on your interest!
 	   articles will pop up as unread.
 
 ### Query Feed Setup
-[image](query_feed_setup.png)
+![image](query_feed_setup.png)
 
 
 ### Twitter RSS feed recommendation Generation
-[image](twitter_recommendations.png)
+![image](twitter_recommendations.png)
 
 
