@@ -14,7 +14,7 @@ tfidf_path = 'tfidf.p'
 meta_path = 'tfidf_meta.p'
 model_path = 'model.p'
 max_train = 5000
-max_features = 2000
+max_features = 5000
 
 #Context managers for atomic writes courtesy of
 # http://stackoverflow.com/questions/2333872/atomic-writing-to-file-with-python
@@ -86,21 +86,22 @@ def query_db(db, query, args=()):
 
 def generate_tfidf_pickles():
     sqldb = connect_db(db_path)
-    records = query_db(sqldb, 'select author, id, title, content, flags from rss_item')
+    records = query_db(sqldb, 'select feedurl, author, id, title, content, flags from rss_item')
     content_list = []
     outcome_list = []
     id_list = []
     for record in records:
-        content_list.append(record['author'] + '||||' + record['title'] + '||||' + record['content'])
-        outcome_list.append((record['flags'] is not None and 's' in record['flags']) * 1)
+        content_list.append('||'+ record['feedurl'] + '|| \n ||' + record['author'] + '|| \n ||' + record['title'] + '|| \n' + record['content'])
+        outcome_list.append((record['flags'] is not None and 'r' not in record['flags'] and 's' in record['flags']) * 1)
         id_list.append(record['id'])
     print("Total %d feed items found" %(len(content_list)))
+    print(content_list[0])
     # compute tfidf vectors with scikits
     v = TfidfVectorizer(input='content', 
             encoding='utf-8', decode_error='replace', strip_accents='unicode', 
             lowercase=True, analyzer='word', stop_words='english', 
             token_pattern=r'(?u)\b[a-zA-Z_][a-zA-Z0-9_]+\b',
-            ngram_range=(1, 2), max_features = max_features, 
+            ngram_range=(1, 3), max_features = max_features, 
             norm='l2', use_idf=True, smooth_idf=True, sublinear_tf=True,
             max_df=1.0, min_df=1)
     v.fit(content_list)
