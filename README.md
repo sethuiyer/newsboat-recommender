@@ -19,3 +19,5 @@ Enjoy RSS feeds on newsboat with machine learning recommendations based on your 
 ![image](rss_feed_experiments.png)
 
 
+### Thanks
+Thanks to https://github.com/karpathy/arxiv-sanity-preserver. Most of the logic was taken from here.
