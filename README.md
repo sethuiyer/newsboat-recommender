@@ -21,3 +21,6 @@ Enjoy RSS feeds on newsboat with machine learning recommendations based on your 
 
 ### Thanks
 Thanks to https://github.com/karpathy/arxiv-sanity-preserver. Most of the logic was taken from here.
+
+## Extra Info
+Use the BERT based branch if you want to use transformer models in your recommendations
