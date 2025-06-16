@@ -80,7 +80,15 @@ An interesting consequence of the design is that recommendations tend to be dive
 
 ### Combining the Scores
 
-Why combine two SVMs instead of using one? Imagine an article whose title says "A Gentle Introduction to Neural Networks" but whose content is short and generic. The TF-IDF model might not find many keywords it recognizes, resulting in a low score. The sentence embedding of the title, however, could place it near other tutorials you enjoyed in the past, yielding a high score. Conversely, if an article's title is bland but its body is rich with your favorite topics, the TF-IDF model might capture that well. By averaging the two scores with custom weights we hedge our bets. This is a simple form of ensemble learning, where the diversity of models leads to better overall performance.
+Historically the recommender simply averaged the scores of the two SVMs. The new
+version fuses multiple rankings using **reciprocal rank fusion**. Each model
+produces its own ranked list and the final score for an article is the sum of
+`1/(k + rank)` terms. This approach favors items that appear near the top of any
+list. In addition, the sentence embeddings are projected into a Poincar&eacute;
+ball and compared to the average "interesting" article using a hyperbolic
+distance. The resulting distance acts as a third ranking signal. RRF then
+combines TF&#8209;IDF, embedding SVM, and hyperbolic similarity into a single
+robust ordering.
 
 ### Updating the Database
 

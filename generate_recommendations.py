@@ -1,7 +1,14 @@
 import os
 import sys
 import pickle
-from utils import connect_db, query_db, update_newsboat_records
+from utils import (
+    connect_db,
+    query_db,
+    update_newsboat_records,
+    to_poincare_ball,
+    hyperbolic_distance,
+    rrf_fuse,
+)
 
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -51,13 +58,19 @@ def generate_recs_from_model(meta_path, tfidf_path, model_path):
     X_smart = cool_nlp_model.encode(title_list)
     clf = model['clf']
     beclf = model['beclf']
+    centroid = model.get('centroid')
     y = np.array(outcome_list).astype(np.float32)
     X_tfidf = X_tfidf.todense().astype(np.float32)
     print("Recommending...")
     s_tfidf = clf.decision_function(X_tfidf)
     s_smart = beclf.decision_function(X_smart)
-    s = s_smart * 0.65 + s_tfidf * 0.35
-    sortix = np.argsort(-s)
+    if centroid is not None:
+        poincare_vectors = [to_poincare_ball(v) for v in X_smart]
+        dists = [ -hyperbolic_distance(v, centroid) for v in poincare_vectors]
+        fusion = rrf_fuse([s_tfidf.tolist(), s_smart.tolist(), dists])
+    else:
+        fusion = rrf_fuse([s_tfidf.tolist(), s_smart.tolist()])
+    sortix = np.argsort(-np.array(fusion))
     recs = sortix[y[sortix] == 0]
     recs = recs[:max_recommendations]
     print(recs)
