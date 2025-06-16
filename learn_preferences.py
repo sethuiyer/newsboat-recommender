@@ -35,11 +35,11 @@ def generate_tfidf_pickles():
     id_list = []
     title_list = []
     for record in records:
-        # We should not judge the book by it's cover
+        # We should not judge the book by its cover
         content_list.append('||'+ record['feedurl'] + '|| \n ||' + record['author'] + '|| \n ||' + record['title'] + '|| \n' + record['content'])
         outcome_list.append((record['flags'] is not None and 'r' not in record['flags'] and 's' in record['flags']) * 1)
         id_list.append(record['id'])
-        # Yes, we are judging the book by it's cover but we are using the cool NLP model to judge
+        # Yes, we are judging the book by its cover but we are using the cool NLP model to judge
         title_list.append(record['title']) 
     print("Total %d feed items found" %(len(content_list)))
     print(content_list[0])
