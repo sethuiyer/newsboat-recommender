@@ -1,7 +1,7 @@
 import os
 import sys
 import pickle
-from utils import connect_db, query_db, safe_pickle_dump
+from utils import connect_db, query_db, safe_pickle_dump, poincare_mean
 
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -87,10 +87,14 @@ def build_model(meta_path, tfidf_path):
     clf.fit(X_tfidf, y)
     beclf = LinearSVC(class_weight='balanced', verbose=False, max_iter=1000000, tol=1e-6)
     beclf.fit(X_smart, y)
+    positives = X_smart[y == 1]
+    positive_vectors = [vec for vec in positives]
+    centroid = poincare_mean(positive_vectors)
     model = {}
     model['db_name'] = db_path
     model['clf'] = clf
     model['beclf'] = beclf
+    model['centroid'] = centroid
     safe_pickle_dump(model, model_path)
 
 
