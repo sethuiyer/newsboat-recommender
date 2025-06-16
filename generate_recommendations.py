@@ -33,11 +33,11 @@ def generate_recs_from_model(meta_path, tfidf_path, model_path):
     id_list = []
     title_list = []
     for record in records:
-        # We should not judge the book by it's cover
+        # We should not judge the book by its cover
         content_list.append('||'+ record['feedurl'] + '|| \n ||' + record['author'] + '|| \n ||' + record['title'] + '|| \n' + record['content'])
         outcome_list.append((record['flags'] is not None and 'r' not in record['flags'] and 's' in record['flags']) * 1)
         id_list.append(record['id'])
-        # Yes, we are judging the book by it's cover but we are using the cool NLP model to judge
+        # Yes, we are judging the book by its cover but we are using the cool NLP model to judge
         title_list.append(record['title']) 
     print("Total %d feed items found" %(len(content_list)))
     print(content_list[0])
@@ -51,9 +51,8 @@ def generate_recs_from_model(meta_path, tfidf_path, model_path):
     X_smart = cool_nlp_model.encode(title_list)
     clf = model['clf']
     beclf = model['beclf']
-    y = out['y']
+    y = np.array(outcome_list).astype(np.float32)
     X_tfidf = X_tfidf.todense().astype(np.float32)
-    y = np.array(y).astype(np.float32)
     print("Recommending...")
     s_tfidf = clf.decision_function(X_tfidf)
     s_smart = beclf.decision_function(X_smart)
