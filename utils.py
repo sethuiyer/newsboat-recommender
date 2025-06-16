@@ -48,6 +48,9 @@ def open_atomic(filepath, *args, **kwargs):
     """
     fsync = kwargs.pop('fsync', False)
 
+    # Ensure the target directory exists before creating the temporary file
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+
     with _tempfile(dir=os.path.dirname(filepath)) as tmppath:
         with open(tmppath, *args, **kwargs) as f:
             yield f
