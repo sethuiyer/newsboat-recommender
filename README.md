@@ -90,6 +90,20 @@ distance. The resulting distance acts as a third ranking signal. RRF then
 combines TF&#8209;IDF, embedding SVM, and hyperbolic similarity into a single
 robust ordering.
 
+### Running a Full Evaluation
+
+To gauge how much the new fusion method helps, run `evaluate.py` after you have
+trained a model. The script performs a small k-fold cross-validation on your
+database and reports the mean average precision of both the old weighted-average
+baseline and the fused ranking with hyperbolic distance.
+
+```bash
+python evaluate.py ~/.newsboat/cache.db
+```
+
+Comparing the two numbers reveals whether the fused recommender actually
+outperforms the baseline on your data.
+
 ### Updating the Database
 
 Once the recommendations are computed, `generate_recommendations.py` writes them back into the database via `update_newsboat_records`. This function executes an SQL `UPDATE` statement for each recommended ID, setting the flags column to `'rec'`. Newsboat's query feed mechanism can filter entries by flag, so you configure your feed list to show everything marked with `rec`. The next time you open Newsboat, the recommendations appear alongside the rest of your subscriptions as unread items.
